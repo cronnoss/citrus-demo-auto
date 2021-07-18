@@ -22,6 +22,7 @@
 
     <citrus:global-variables>
         <citrus:variable name="project.name" value="Citrus Integration Tests"/>
+        <citrus:file path="citrus.properties"/>
     </citrus:global-variables>
 
 </beans>

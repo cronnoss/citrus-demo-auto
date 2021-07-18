@@ -22,11 +22,27 @@
 
         <variables>
             <variable name="mydate" value="citrus:currentDate()"/>
+            <variable name="persons">
+                <value>
+                    <data>
+                        <![CDATA[
+                        <persons><person><name>Theodor</name>
+                        <age>10</age></person>
+                        <persons><person><name>Alvin</name>
+                        <age>9</age></person>
+                        </persons>
+                        ]]>
+                    </data>
+                </value>
+            </variable>
         </variables>
 
         <actions>
             <echo>
-                <message>Today is: ${mydate}</message>
+                <message>Today is: ${mydate} !!!!</message>
+            </echo>
+            <echo>
+                <message>Persons data is ${persons} !!!!</message>
             </echo>
         </actions>
 
