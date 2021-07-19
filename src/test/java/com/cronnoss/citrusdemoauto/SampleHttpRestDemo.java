@@ -18,8 +18,7 @@ public class SampleHttpRestDemo extends TestNGCitrusTestDesigner {
     public void testGetAllUsers() {
         http().client(user).send()
                 .get()
-                .contentType("application/json")
-                .header("Authorization", "Basic admin@cronnoss.com admin");
+                .header("Authorization", "Basic YWRtaW5AY3Jvbm5vc3MuY29tOmFkbWlu");
         http().client(user).receive().response(HttpStatus.OK);
     }
 }
