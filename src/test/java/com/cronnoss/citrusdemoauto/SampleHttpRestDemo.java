@@ -20,7 +20,7 @@ public class SampleHttpRestDemo extends TestNGCitrusTestDesigner {
     @Autowired
     HttpClient user;
 
-    @Test
+    @Test(enabled = false)
     @CitrusTest
     public void testGetAllUsers() {
 
@@ -46,6 +46,40 @@ public class SampleHttpRestDemo extends TestNGCitrusTestDesigner {
 
         http().client(user).send()
                 .get()
+                .header("Authorization", "Basic YWRtaW5AY3Jvbm5vc3MuY29tOmFkbWlu");
+        http().client(user).receive().response(HttpStatus.OK)
+                .validate("$", notNullValue())
+                .validate("$", data)
+                .extractFromPayload("$", "response");
+        echo("${response}");
+    }
+
+    @Test
+    @CitrusTest
+    public void testGetUserById() {
+
+        String data = "";
+        ClassPathResource resource = new ClassPathResource("user.json");
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            data = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        http().client(user).send()
+                .get("/1")
                 .header("Authorization", "Basic YWRtaW5AY3Jvbm5vc3MuY29tOmFkbWlu");
         http().client(user).receive().response(HttpStatus.OK)
                 .validate("$", notNullValue())

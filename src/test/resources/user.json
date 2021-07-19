@@ -1,0 +1,1 @@
+{"firstName":"User_First","lastName":"User_Last","_links":{"self":{"href":"http:\/\/localhost:8080\/api\/users\/1"},"user":{"href":"http:\/\/localhost:8080\/api\/users\/1"}},"roles":["USER"],"email":"user@gmail.com"}
