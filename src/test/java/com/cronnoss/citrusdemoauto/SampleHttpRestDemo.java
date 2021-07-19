@@ -4,10 +4,15 @@ import com.consol.citrus.annotations.CitrusTest;
 import com.consol.citrus.dsl.testng.TestNGCitrusTestDesigner;
 import com.consol.citrus.http.client.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Test;
 
-import static org.hamcrest.Matchers.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import static org.hamcrest.Matchers.notNullValue;
 
 public class SampleHttpRestDemo extends TestNGCitrusTestDesigner {
 
@@ -18,12 +23,33 @@ public class SampleHttpRestDemo extends TestNGCitrusTestDesigner {
     @Test
     @CitrusTest
     public void testGetAllUsers() {
+
+        String data = "";
+        ClassPathResource resource = new ClassPathResource("users.json");
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            data = reader.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         http().client(user).send()
                 .get()
                 .header("Authorization", "Basic YWRtaW5AY3Jvbm5vc3MuY29tOmFkbWlu");
         http().client(user).receive().response(HttpStatus.OK)
                 .validate("$", notNullValue())
-                .validate("$", "{\"_embedded\":{\"users\":[{\"firstName\":\"User_First\",\"lastName\":\"User_Last\",\"_links\":{\"self\":{\"href\":\"http:\\/\\/localhost:8080\\/api\\/users\\/1\"},\"user\":{\"href\":\"http:\\/\\/localhost:8080\\/api\\/users\\/1\"}},\"roles\":[\"USER\"],\"email\":\"user@gmail.com\"},{\"firstName\":\"Admin_First\",\"lastName\":\"Admin_Last\",\"_links\":{\"self\":{\"href\":\"http:\\/\\/localhost:8080\\/api\\/users\\/2\"},\"user\":{\"href\":\"http:\\/\\/localhost:8080\\/api\\/users\\/2\"}},\"roles\":[\"USER\",\"ADMIN\"],\"email\":\"admin@cronnoss.com\"}]},\"_links\":{\"search\":{\"href\":\"http:\\/\\/localhost:8080\\/api\\/users\\/search\"},\"profile\":{\"href\":\"http:\\/\\/localhost:8080\\/api\\/profile\\/users\"},\"self\":{\"href\":\"http:\\/\\/localhost:8080\\/api\\/users\"}},\"page\":{\"number\":0,\"size\":20,\"totalPages\":1,\"totalElements\":2}}")
+                .validate("$", data)
                 .extractFromPayload("$", "response");
         echo("${response}");
     }
