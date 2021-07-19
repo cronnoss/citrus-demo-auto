@@ -25,4 +25,7 @@
         <citrus:file path="citrus.properties"/>
     </citrus:global-variables>
 
+    <citrus-http:client id="user"
+                        request-url="http://localhost:8080/api/users"/>
+
 </beans>
