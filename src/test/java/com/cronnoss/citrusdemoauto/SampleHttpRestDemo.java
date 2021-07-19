@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.testng.annotations.Test;
 
+import static org.hamcrest.Matchers.*;
+
 public class SampleHttpRestDemo extends TestNGCitrusTestDesigner {
 
 
@@ -19,6 +21,9 @@ public class SampleHttpRestDemo extends TestNGCitrusTestDesigner {
         http().client(user).send()
                 .get()
                 .header("Authorization", "Basic YWRtaW5AY3Jvbm5vc3MuY29tOmFkbWlu");
-        http().client(user).receive().response(HttpStatus.OK);
+        http().client(user).receive().response(HttpStatus.OK)
+                .validate("$", notNullValue())
+                .extractFromPayload("$", "response");
+        echo("${response}");
     }
 }
