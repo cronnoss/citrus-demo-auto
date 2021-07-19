@@ -88,7 +88,7 @@ public class SampleHttpRestDemo extends TestNGCitrusTestDesigner {
         echo("${response}");
     }
 
-    @Test
+    @Test(enabled = false)
     @CitrusTest
     public void testAddUser() {
 
@@ -120,5 +120,16 @@ public class SampleHttpRestDemo extends TestNGCitrusTestDesigner {
         http().client(user).receive().response(HttpStatus.CREATED)
                 .extractFromPayload("$", "response");
         echo("${response}");
+    }
+
+    @Test//(enabled = false)
+    @CitrusTest
+    public void testDeleteUser() {
+
+        http().client(user).send()
+                .delete("/3")
+                .header("Authorization", "Basic YWRtaW5AY3Jvbm5vc3MuY29tOmFkbWlu");
+        http().client(user).receive().response(HttpStatus.NO_CONTENT)
+                .payload("");
     }
 }
