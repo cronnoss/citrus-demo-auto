@@ -1,8 +1,10 @@
 package com.cronnoss.citrusdemoauto;
 
+import com.consol.citrus.annotations.CitrusEndpoint;
 import com.consol.citrus.annotations.CitrusTest;
 import com.consol.citrus.dsl.testng.TestNGCitrusTestDesigner;
 import com.consol.citrus.http.client.HttpClient;
+import com.consol.citrus.http.config.annotation.HttpClientConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
@@ -17,7 +19,9 @@ import static org.hamcrest.Matchers.notNullValue;
 public class SampleHttpRestDemo extends TestNGCitrusTestDesigner {
 
 
-    @Autowired
+    //@Autowired
+    @CitrusEndpoint
+    @HttpClientConfig(requestUrl = "http://localhost:8080/api/users")
     HttpClient user;
 
     @Test(priority = 0/*, enabled = false*/)
